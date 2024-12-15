@@ -28,14 +28,14 @@ def parse_xml(file_path):
     # Extract function signatures
     signature = root.find("trs/signature")
     func_counter = 0
-    # funcs_ordered_with_name_length = sorted([func.find("name").text.strip() for func in signature.findall("funcsym")], key=len, reverse=True)
+    funcs_ordered_with_name_length = sorted([func.find("name").text.strip() for func in signature.findall("funcsym")], key=len, reverse=True)
     funcs_ordered = sorted(signature.findall("funcsym"), key=lambda func: len(func.find("name").text.strip()), reverse=True)
     for func in funcs_ordered:
         
         name = func.find("name").text.strip()
         new_name = chr(ord("a")+ func_counter)
         
-        while new_name in old_new_functions.values() or new_name in variables: #or new_name in [key[0].lower() for key in old_new_functions.keys()]
+        while new_name in old_new_functions.values() or new_name in variables or new_name in funcs_ordered_with_name_length: #or new_name in [key[0].lower() for key in old_new_functions.keys()]
             new_name = chr(ord(new_name) + 1)
 
         old_new_functions[name] = new_name
@@ -125,8 +125,8 @@ def find_vars(file):
 
 if __name__ == "__main__":
     try:
-        # relative_path = "./SK90/4.27.xml"
-        # relative_path2 = "./SK90/4.27.trs"
+        # relative_path = "./SK90/4.28.xml"
+        # relative_path2 = "./SK90/4.28.trs"
 
         if len(sys.argv) != 3:
             print("Usage: python3 parsing_xml_trs.py <input_xml_file> <output_trs_file>")
